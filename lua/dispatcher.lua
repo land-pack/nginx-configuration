@@ -1,22 +1,17 @@
-local var = ngx.var                                                                       
-                                                                                          
-local name = var.name or "Anonymous"                                                      
---ngx.say("Hello, ", name, "!")                                                           
-                                                                                          
-local age = var.age or 18                                                                 
-                                                                                          
---ngx.say("Hello, ", name, "Your age is ",age)                                            
---                                                                                        
---                                                                                        
---hosts = {                                                                               
---  127.0.0.1:8899                                                                        
---  127.0.0.1:8898                                                                        
---  127.0.0.1:8897                                                                        
---  127.0.0.1:8896                                                                        
---  127.0.0.1:8895                                                                        
---  127.0.0.1:8894                                                                        
---}                                                                                       
---Get the backend node list                                                               
---check if any one of that avaible ~~                                                     
---                                                                                        
-return "127.0.0.1:7788"
+local var = ngx.var
+local devicedb = ngx.shared.devicedb
+-- [[ Node host list, you can put it all in your redis cache ]]--
+hosts = {
+  "127.0.0.1:8109",
+  "127.0.0.1:8108",
+}
+
+-- [[ Core dispatcher ]]--
+
+-- [[ Rand pick up a node ]] --
+host = hosts[math.random(#hosts)]
+
+-- [[ Connection shutdown monitor ]]--
+
+-- [[ Return the host to nginx for proxy pass ]]--
+return host
