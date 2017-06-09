@@ -1,0 +1,22 @@
+# Use Lua for HTTP redirect so the site works
+# without the proxy backend.
+# Note: NGINx needs to have liblua compiled to it. For Debian/Ubuntu:
+# apt-get install nginx-extras
+# For more : https://stackoverflow.com/questions/3657614/how-to-rewrite-location-in-nginx-depending-on-the-client-browsers-language/23432310#23432310
+
+location = / {
+    rewrite_by_lua '
+        for lang in (ngx.var.http_accept_language .. ","):gmatch("([^,]*),") do
+            if string.sub(lang, 0, 2) == "en" then
+                ngx.redirect("/en/index.html")
+            end
+            if string.sub(lang, 0, 2) == "nl" then
+                ngx.redirect("/nl/index.html")
+            end
+            if string.sub(lang, 0, 2) == "de" then
+                ngx.redirect("/de/index.html")
+            end
+        end
+        ngx.redirect("/en/index.html")
+    ';
+}
